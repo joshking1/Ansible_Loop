@@ -1,0 +1,16 @@
+---
+- name: Create folders on multiple servers
+  hosts: aws_servers
+  become: yes  # To run commands with elevated privileges
+
+  tasks:
+    - name: Check if the folder exists
+      stat:
+        path: "/local/date_entry"
+      register: folder_check
+
+    - name: Create the folder if it doesn't exist
+      file:
+        path: "/local/date_entry"
+        state: directory
+      when: not folder_check.stat.exists
